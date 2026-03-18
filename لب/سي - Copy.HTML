@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هدية خاصة لـ سـاره</title>
+
+<style>
+body {
+    background-color: #ffdeeb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    padding: 30px;
+    border-radius: 20px;
+    width: 300px;
+}
+
+.img-container img {
+    width: 150px;
+    border-radius: 15px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    background: #ff69b4;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hearts {
+    position: absolute;
+    color: red;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+    <div class="img-container">
+        <img id="main-img" src="1.jpeg">
+    </div>
+
+    <h2 id="text">انتي سـاره؟ 💖</h2>
+
+    <div id="btn-group">
+        <button onclick="nextStep()">اي، اني سـاره</button>
+    </div>
+</div>
+
+<!-- يوتيوب -->
+<div id="music-box" style="display:none; position:absolute; bottom:10px; width:90%;">
+   <iframe width="100%" height="200"
+   src="https://www.youtube.com/embed/VkH3aMIWntw?autoplay=1&mute=0&rel=0"
+   frameborder="0"
+   allow="autoplay; encrypted-media"
+   allowfullscreen>
+   </iframe>
+</div>
+
+<script>
+
+let step = 0;
+
+const steps = [
+    { text: "هلو سـاره.. عندي سؤال الج 🙈", btn: "شنو هو؟", img: "2.jpeg" },
+    { text: "بس مستحية اسألج اياه 😅", btn: "اسال", img: "3.jpeg" },
+    { text: "انتي ليش حلوه 🙄", btn: "ها؟", img: "6.jpeg" }, 
+    { text: "اذا انتي حلوه؟، دوسي على القلب ❤️", btn: "❤️", img: "5.jpeg" }
+];
+
+function nextStep() {
+    if (step < steps.length) {
+
+        document.getElementById("text").innerText = steps[step].text;
+
+        document.getElementById("main-img").src = steps[step].img;
+
+        document.getElementById("btn-group").innerHTML =
+            `<button onclick="nextStep()">${steps[step].btn}</button>`;
+
+        step++;
+        createHeart();
+
+    } else {
+        showFinal();
+    }
+}
+
+function showFinal() {
+    document.getElementById("text").innerText =
+        "🌸  هـايـه الا غـنـيـه لـلـحـلـوه 🌸";
+
+    document.getElementById("btn-group").innerHTML = `
+        <button onclick="playMusic()">تشغيل الأغنية 🎵</button>
+        <button onclick="location.reload()" style="background:#ccc;">إعادة</button>
+    `;
+}
+
+function playMusic() {
+    document.getElementById("music-box").style.display = "block";
+}
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "hearts";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.top = "100vh";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.style.top = "-10vh";
+        heart.style.opacity = "0";
+    }, 100);
+
+    setTimeout(() => heart.remove(), 3000);
+}
+
+</script>
+
+</body>
+</html>
