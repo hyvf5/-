@@ -6,47 +6,66 @@
 <title>هدية خاصة لـ سـاره</title>
 
 <style>
-body {
-    background-color: #ffdeeb;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: sans-serif;
-    overflow: hidden;
-}
+    body {
+        background-color: #ffdeeb;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+    }
 
-.container {
-    text-align: center;
-    background: rgba(255,255,255,0.8);
-    padding: 30px;
-    border-radius: 20px;
-    width: 300px;
-}
+    .container {
+        text-align: center;
+        background: rgba(255,255,255,0.9);
+        padding: 30px;
+        border-radius: 25px;
+        width: 320px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        z-index: 10;
+    }
 
-.img-container img {
-    width: 150px;
-    border-radius: 15px;
-}
+    .img-container img {
+        width: 100%;
+        max-width: 200px;
+        border-radius: 20px;
+        margin-bottom: 15px;
+        transition: transform 0.3s;
+    }
 
-button {
-    margin-top: 10px;
-    padding: 10px;
-    border: none;
-    border-radius: 50px;
-    background: #ff69b4;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
+    h2 { color: #d63384; font-size: 22px; }
 
-.hearts {
-    position: absolute;
-    color: red;
-}
+    button {
+        margin: 5px;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 50px;
+        background: #ff69b4;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover { background: #e05297; transform: scale(1.05); }
+
+    .hearts {
+        position: absolute;
+        color: #ff4d4d;
+        font-size: 25px;
+        user-select: none;
+        pointer-events: none;
+        animation: flyUp 3s linear forwards;
+    }
+
+    @keyframes flyUp {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
 </style>
-
 </head>
 
 <body>
@@ -63,57 +82,57 @@ button {
     </div>
 </div>
 
-<!-- يوتيوب -->
-<div id="music-box" style="display:none; position:absolute; bottom:10px; width:90%;">
-   <iframe width="100%" height="200"
-   src="https://www.youtube.com/embed/VkH3aMIWntw?autoplay=1&mute=0&rel=0"
-   frameborder="0"
-   allow="autoplay; encrypted-media"
-   allowfullscreen>
+<div id="music-box" style="display:none;">
+   <iframe id="yt-player" width="0" height="0" 
+   src="" 
+   frameborder="0" allow="autoplay">
    </iframe>
 </div>
 
 <script>
-
 let step = 0;
-
 const steps = [
     { text: "هلو سـاره.. عندي سؤال الج 🙈", btn: "شنو هو؟", img: "2.jpeg" },
     { text: "بس مستحية اسألج اياه 😅", btn: "اسال", img: "3.jpeg" },
     { text: "انتي ليش حلوه 🙄", btn: "ها؟", img: "6.jpeg" }, 
-    { text: "اذا انتي حلوه؟، دوسي على القلب ❤️", btn: "❤️", img: "5.jpeg" }
+    { text: "بما انج حلوه.. دوسي على القلب ❤️", btn: "❤️", img: "5.jpeg" }
 ];
 
 function nextStep() {
     if (step < steps.length) {
-
         document.getElementById("text").innerText = steps[step].text;
-
         document.getElementById("main-img").src = steps[step].img;
-
-        document.getElementById("btn-group").innerHTML =
+        document.getElementById("btn-group").innerHTML = 
             `<button onclick="nextStep()">${steps[step].btn}</button>`;
-
+        
+        // إطلاق قلوب عند كل ضغطة
+        for(let i=0; i<5; i++) createHeart();
         step++;
-        createHeart();
-
     } else {
         showFinal();
     }
 }
 
 function showFinal() {
-    document.getElementById("text").innerText =
-        "🌸  هـايـه الا غـنـيـه لـلـحـلـوه 🌸";
-
+    document.getElementById("text").innerHTML = "🌸 هـايـه غـنـيـه لـلـحـلـوه 🌸";
+    document.getElementById("main-img").src = "final.jpeg"; // يمكنك تغيير الصورة الأخيرة هنا
     document.getElementById("btn-group").innerHTML = `
         <button onclick="playMusic()">تشغيل الأغنية 🎵</button>
         <button onclick="location.reload()" style="background:#ccc;">إعادة</button>
     `;
+    for(let i=0; i<15; i++) createHeart();
 }
 
 function playMusic() {
-    document.getElementById("music-box").style.display = "block";
+    // تحديث الرابط ليعمل الأوتوبلاي عند الضغط
+    const player = document.getElementById("yt-player");
+    player.src = "https://www.youtube.com/embed/VkH3aMIWntw?autoplay=1&rel=0";
+    
+    // إشعار بسيط أن الموسيقى بدأت
+    alert("استمتعي بالأغنية يا سارة ✨");
+    
+    // استمرار تساقط القلوب
+    setInterval(createHeart, 300);
 }
 
 function createHeart() {
@@ -122,17 +141,11 @@ function createHeart() {
     heart.innerHTML = "❤️";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.top = "100vh";
+    heart.style.fontSize = (Math.random() * 20 + 15) + "px";
 
     document.body.appendChild(heart);
-
-    setTimeout(() => {
-        heart.style.top = "-10vh";
-        heart.style.opacity = "0";
-    }, 100);
-
     setTimeout(() => heart.remove(), 3000);
 }
-
 </script>
 
 </body>
